@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>Fullstack Express Aplikace</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <h1>Fullstack Express Aplikace</h1>
+
+  <section>
+    <h2>Přidat uživatele</h2>
+    <form action="/users" method="POST">
+      <input type="text" name="name" placeholder="Jméno" required>
+      <input type="email" name="email" placeholder="Email" required>
+      <button type="submit">Přidat uživatele</button>
+    </form>
+  </section>
+
+  <section>
+    <h2>Uživatelé</h2>
+    <ul>
+      <% if (typeof users !== 'undefined' && users.length > 0) { %>
+        <% users.forEach(user => { %>
+          <li>
+            ID: <%= user.id %> – <%= user.name %> (<%= user.email %>)
+            <form action="/users/<%= user.id %>?_method=PUT" method="POST" style="display:inline;">
+              <input type="text" name="name" placeholder="Nové jméno" required>
+              <input type="email" name="email" placeholder="Nový email" required>
+              <button type="submit">Aktualizovat</button>
+            </form>
+            <form action="/users/<%= user.id %>?_method=DELETE" method="POST" style="display:inline;">
+              <button type="submit">Smazat</button>
+            </form>
+          </li>
+        <% }); %>
+      <% } else { %>
+        <li>Žádní uživatelé</li>
+      <% } %>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Přidat příspěvek</h2>
+    <form action="/posts" method="POST">
+      <input type="number" name="user_id" placeholder="ID uživatele" required>
+      <input type="text" name="title" placeholder="Titulek" required>
+      <textarea name="content" placeholder="Obsah" required></textarea>
+      <button type="submit">Přidat příspěvek</button>
+    </form>
+  </section>
+
+  <section>
+    <h2>Příspěvky</h2>
+    <ul>
+      <% if (typeof posts !== 'undefined' && posts.length > 0) { %>
+        <% posts.forEach(post => { %>
+          <li>
+            ID: <%= post.id %> – Titulek: <%= post.title %> – Obsah: <%= post.content %> – Autor: <%= post.author %>
+            <form action="/posts/<%= post.id %>?_method=PUT" method="POST" style="display:inline;">
+              <input type="text" name="title" placeholder="Nový titulek" required>
+              <input type="text" name="content" placeholder="Nový obsah" required>
+              <button type="submit">Aktualizovat</button>
+            </form>
+            <form action="/posts/<%= post.id %>?_method=DELETE" method="POST" style="display:inline;">
+              <button type="submit">Smazat</button>
+            </form>
+          </li>
+        <% }); %>
+      <% } else { %>
+        <li>Žádné příspěvky</li>
+      <% } %>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Přidat komentář</h2>
+    <form action="/comments" method="POST">
+      <input type="number" name="post_id" placeholder="ID příspěvku" required>
+      <input type="number" name="user_id" placeholder="ID uživatele" required>
+      <input type="text" name="comment" placeholder="Komentář" required>
+      <button type="submit">Přidat komentář</button>
+    </form>
+  </section>
+
+  <section>
+    <h2>Komentáře</h2>
+    <ul>
+      <% if (typeof comments !== 'undefined' && comments.length > 0) { %>
+        <% comments.forEach(comment => { %>
+          <li>
+            ID: <%= comment.id %> – Komentář: <%= comment.comment %> – Příspěvek: <%= comment.postTitle %> – Komentátor: <%= comment.commenter %>
+            <form action="/comments/<%= comment.id %>?_method=PUT" method="POST" style="display:inline;">
+              <input type="text" name="comment" placeholder="Nový komentář" required>
+              <button type="submit">Aktualizovat</button>
+            </form>
+            <!-- Formulář pro DELETE komentáře -->
+            <form action="/comments/<%= comment.id %>?_method=DELETE" method="POST" style="display:inline;">
+              <button type="submit">Smazat</button>
+            </form>
+          </li>
+        <% }); %>
+      <% } else { %>
+        <li>Žádné komentáře</li>
+      <% } %>
+    </ul>
+  </section>
+
+</body>
+</html>
